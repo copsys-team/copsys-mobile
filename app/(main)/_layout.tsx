@@ -1,44 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, ScaledSize } from "react-native";
 import { isTablet } from "@/utils/deviceInfo";
-import { Redirect, Tabs } from "expo-router";
+import { Redirect } from "expo-router";
 import { useScreenLock } from "@/hooks/useScreenLock";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import Drawer from "expo-router/drawer";
 import { FontAwesome } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+import CustomDrawer from "@/components/ui/CustomDrawer";
+
+
 
 export default function AppLayout() {
   const checkIsTablet = isTablet();
-
-  // Change drawer type depending screen orientation
-  const [drawerType, setDrawerType] = useState<"permanent" | "front">("front");
-  const updateDrawerType = ({ screen }: { screen: ScaledSize }) => {
-    const { width, height } = screen;
-    const newType = width > height && width > 800 ? "permanent" : "front";
-    setDrawerType(newType);
-  };
-
-  useEffect(() => {
-    updateDrawerType({ screen: Dimensions.get("screen") });
-    // Listen for screen size changes
-    const subscription = Dimensions.addEventListener(
-      "change",
-      updateDrawerType
-    );
-    return () => subscription.remove();
-  }, []);
+ const [drawerType,setDrawerType]= useState<any>(null)
+  
 
   const { authenticate } = useScreenLock();
   useEffect(() => {
     authenticate(); // authenticate user biometric if device supports
   }, []);
 
-  return (
-    <AuthGuard>
-      {checkIsTablet ? <MainDrawer drawerType={drawerType} /> : <MainTabs />}
-    </AuthGuard>
-  );
-}
+ 
 
 function AuthGuard({ children }: { children: any }) {
   const { loggedIn } = useAuthStore();
@@ -46,43 +29,47 @@ function AuthGuard({ children }: { children: any }) {
   return <>{children}</>;
 }
 
-function MainTabs() {
-  return (
-    <Tabs>
-      <Tabs.Screen
-        name="index"
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Tabs>
-  );
-}
+useEffect(()=>{
+{checkIsTablet?setDrawerType('permanent'):setDrawerType('slide')}},[]) 
 
-function MainDrawer({ drawerType }: { drawerType: "permanent" | "front" }) {
   return (
-    <Drawer screenOptions={{ drawerType }}>
+  <AuthGuard>
+    <Drawer screenOptions={
+      { drawerType:drawerType,
+        overlayColor:'transparent',
+        drawerActiveBackgroundColor:'#A5D6A7',
+        drawerActiveTintColor:"black",
+        drawerLabelStyle:styles.drawerLabel,
+        drawerStyle:styles.drawerStyle,
+        drawerItemStyle:styles.drawerItem,
+         
+     }} drawerContent={(props)=><CustomDrawer{...props}/>}>
       <Drawer.Screen
-        name="index"
+        name="(tabs)"
+        
         options={{
+          drawerLabel:'Dashboard',
+          headerShown:false,
           title: "Dashboard",
           drawerIcon: () => <FontAwesome size={20} name="dashboard" />,
         }}
       />
-      <Drawer.Screen
-        name="members"
-        options={{
-          title: "Members",
-          drawerIcon: () => <FontAwesome size={20} name="group" />,
-        }}
-      />
-      <Drawer.Screen
-        name="passbooks"
-        options={{
-          title: "Passbooks",
-          drawerIcon: () => <FontAwesome size={20} name="book" />,
-        }}
-      />
     </Drawer>
+  </AuthGuard>
   );
 }
+const styles = StyleSheet.create({
+  drawerLabel:{
+    fontFamily:'Roboto',
+    fontSize:18,
+    fontWeight:'semibold',
+  },
+  drawerStyle:{
+    width:240,
+    height:'100%'
+  },
+  drawerItem:{
+    borderTopRightRadius:10,
+    borderBottomLeftRadius:10
+  }
+})

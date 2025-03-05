@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import * as ScreenOrientation from "expo-screen-orientation";
 import { AppThemeProvider } from "@/contexts/appTheme";
 import { ScreenLockProvider } from "@/contexts/screenLock";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { isTablet } from "@/utils/deviceInfo";
 import { AppService } from "@/services/appService";
@@ -32,7 +32,7 @@ export default function RootLayout() {
     <AppThemeProvider>
       <ScreenLockProvider>
         <GestureHandlerRootView>
-          <Slot />
+          <Stack screenOptions={{headerShown:false}} />
         </GestureHandlerRootView>
         <StatusBar style="auto" />
       </ScreenLockProvider>
