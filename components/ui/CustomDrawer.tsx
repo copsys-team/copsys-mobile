@@ -19,7 +19,7 @@ export default function CustomDrawer(props:any){
             </View>
          </TouchableNativeFeedback>
          <DrawerItemList{...props} />
-         <View style={{borderBottomWidth:2,borderBottomColor:'lightgray'}}/>
+         <View style={{borderBottomWidth:2,borderBottomColor:'lightgray',marginVertical: 10}}/>
          {/*menu*/}
          {DrawerMenu.map((item,index)=>{return(
     <TouchableOpacity activeOpacity={0.8} onPress={()=>{LayoutAnimation.configureNext(LayoutAnimation.create(200,'easeInEaseOut','opacity'))
@@ -36,6 +36,10 @@ export default function CustomDrawer(props:any){
             })}</View>}
     </TouchableOpacity>
          )})}
+         <TouchableOpacity style={styles.logout} onPress={()=>router.push('/(auth)/login')}>
+         <Feather name="log-out" size={24} color="black" />
+         <Text style={{fontWeight:'semibold',fontSize:18,paddingLeft:10}}>Logout</Text>
+         </TouchableOpacity>
         </View>
         
     )
@@ -58,7 +62,9 @@ const styles = StyleSheet.create({
         backgroundColor:'#A5D6A7',
         height:40,
         width:'100%',
-        borderRadius:10
+        borderRadius:10,
+        shadowRadius:25,
+        shadowColor:'lightgray'
     },
     subMenuStyle:{
         flexDirection:'row',
@@ -70,5 +76,15 @@ const styles = StyleSheet.create({
         borderRadius:10,
         marginVertical:5,
         marginHorizontal:5
+    },
+    logout:{
+        height:40,
+        width:'100%',
+        backgroundColor:'rgb(243, 96, 94)',
+        marginTop:'auto',
+        flexDirection:'row',
+        alignItems:'center',
+        paddingLeft: 10,      
+        
     }
 })
