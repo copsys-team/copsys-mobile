@@ -4,15 +4,17 @@ import { DrawerMenu } from "@/constants/Screens";
 import {useState} from "react"
 import { Redirect, router } from "expo-router";
 import Feather from '@expo/vector-icons/Feather';
+import Animated, { BounceInRight, BounceOutRight, LightSpeedInLeft, LightSpeedOutLeft, useAnimatedStyle, withTiming } from "react-native-reanimated";
 
-if(Platform.OS==='android'){
-    UIManager.setLayoutAnimationEnabledExperimental(true)
-}
+
+
 export default function CustomDrawer(props:any){
     const [menuIndex,setMenuIndex]=useState(-1)
+    
    
     return(
         <View style={styles.container}>
+            <View style={{padding:10,gap:5}}>
          <TouchableNativeFeedback style={styles.gradient}>
             <View style={styles.gradient}>
             <Image source={require('@/assets/images/Welcome.png')} style={styles.gradient}/>
@@ -22,20 +24,28 @@ export default function CustomDrawer(props:any){
          <View style={{borderBottomWidth:2,borderBottomColor:'lightgray',marginVertical: 10}}/>
          {/*menu*/}
          {DrawerMenu.map((item,index)=>{return(
-    <TouchableOpacity activeOpacity={0.8} onPress={()=>{LayoutAnimation.configureNext(LayoutAnimation.create(200,'easeInEaseOut','opacity'))
-    setMenuIndex(menuIndex===index?-1:index)}}>
+    <TouchableOpacity activeOpacity={0.8} onPress={()=>{setMenuIndex(menuIndex===index?-1:index)}}>
         <View style={styles.menuStyle}>
-         <Text>{item.title}</Text> 
-        {menuIndex===index?<Feather name="chevrons-up" size={24} color="black" />:<Feather name="chevrons-down" size={24} color="black" />}
+         <Text>{item.title}</Text>
+         <Animated.View style={{ transform:[
+                {
+                    rotate:(menuIndex===index) ?'90deg':'0deg'
+                }
+            ]}}> 
+        <Feather name="chevron-right" size={24} color="black" />
+        </Animated.View> 
         </View>
         {(menuIndex === index)&&<View>
             {item.MenuLists.map((submenu,index)=>{
-                return(<TouchableOpacity style={styles.subMenuStyle} onPress={()=>router.push(`/drawerScreens/${submenu.route}`)}>
-                   <Text>{submenu.title}</Text> 
-                </TouchableOpacity>)
+                return(<Animated.View entering={BounceInRight} exiting={BounceOutRight}>
+                    <TouchableOpacity style={styles.subMenuStyle} onPress={()=>router.push(`/drawerScreens/${submenu.route}`)}>
+                     <Text>{submenu.title}</Text>           
+                </TouchableOpacity>
+                </Animated.View>)
             })}</View>}
     </TouchableOpacity>
          )})}
+         </View>
          <TouchableOpacity style={styles.logout} onPress={()=>router.push('/(auth)/login')}>
          <Feather name="log-out" size={24} color="black" />
          <Text style={{fontWeight:'semibold',fontSize:18,paddingLeft:10}}>Logout</Text>
@@ -44,16 +54,17 @@ export default function CustomDrawer(props:any){
         
     )
 }
+
+
 const styles = StyleSheet.create({
     gradient:{
         width:'100%',
-        height:120,
+        height:100,
+        padding:10,
         paddingTop:20
     },
     container:{
-        padding:10,
-        gap:5,
-        flex:1
+        flex:1,
     },
     menuStyle:{
         flexDirection:'row',
