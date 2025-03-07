@@ -81,7 +81,7 @@ export default function Home() {
 
       //If we have internet then sync
       if (await isOnline()) {
-        syncService.syncEntity("members");
+        syncService.syncEntity("members", {});
       }
     },
   });
