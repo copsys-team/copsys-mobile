@@ -2,9 +2,11 @@ import { View,Text,Image, TouchableNativeFeedback, StyleSheet, TouchableOpacity,
 import { DrawerItemList } from "@react-navigation/drawer";
 import { DrawerMenu } from "@/constants/Screens";
 import {useState} from "react"
-import { Redirect, router } from "expo-router";
+import {router} from "expo-router";
 import Feather from '@expo/vector-icons/Feather';
-import Animated, { BounceInRight, BounceOutRight, LightSpeedInLeft, LightSpeedOutLeft, useAnimatedStyle, withTiming } from "react-native-reanimated";
+import Animated, { FlipInXUp} from "react-native-reanimated";
+import { Colors } from "@/constants/Colors";
+import { Icon } from "@rneui/themed";
 
 
 
@@ -15,40 +17,52 @@ export default function CustomDrawer(props:any){
     return(
         <View style={styles.container}>
             <View style={{padding:10,gap:5}}>
+
          <TouchableNativeFeedback style={styles.gradient}>
             <View style={styles.gradient}>
-            <Image source={require('@/assets/images/Welcome.png')} style={styles.gradient}/>
+                <Text style={{fontSize:30,fontWeight:700}}>👋 Welcome</Text>
             </View>
          </TouchableNativeFeedback>
+
          <DrawerItemList{...props} />
+         {/*grayspacing*/}
+
          <View style={{borderBottomWidth:2,borderBottomColor:'lightgray',marginVertical: 10}}/>
          {/*menu*/}
          {DrawerMenu.map((item,index)=>{return(
     <TouchableOpacity activeOpacity={0.8} onPress={()=>{setMenuIndex(menuIndex===index?-1:index)}}>
         <View style={styles.menuStyle}>
-         <Text>{item.title}</Text>
+        <Icon name={item.icon} size={20} type={item.iconType} color={Colors.custom.blue}/>
+         <Text style={{paddingLeft:10,color:Colors.custom.black}}>{item.title}</Text>
+
+
          <Animated.View style={{ transform:[
                 {
                     rotate:(menuIndex===index) ?'90deg':'0deg'
                 }
             ]}}> 
-        <Feather name="chevron-right" size={24} color="black" />
-        </Animated.View> 
+        <Feather name="chevron-right" size={24} color={Colors.custom.black} />
+        </Animated.View>
+
+
         </View>
         {(menuIndex === index)&&<View>
             {item.MenuLists.map((submenu,index)=>{
-                return(<Animated.View entering={BounceInRight} exiting={BounceOutRight}>
+                return(
+                <Animated.View entering={FlipInXUp}>
                     <TouchableOpacity style={styles.subMenuStyle} onPress={()=>router.push(`/drawerScreens/${submenu.route}`)}>
-                     <Text>{submenu.title}</Text>           
+                     <Text style={{color:Colors.custom.white}}>{submenu.title}</Text>           
                 </TouchableOpacity>
                 </Animated.View>)
             })}</View>}
     </TouchableOpacity>
+
          )})}
          </View>
+         {/*logout button*/}
          <TouchableOpacity style={styles.logout} onPress={()=>router.push('/(auth)/login')}>
-         <Feather name="log-out" size={24} color="black" />
-         <Text style={{fontWeight:'semibold',fontSize:18,paddingLeft:10}}>Logout</Text>
+         <Feather name="log-out" size={24} color={Colors.custom.white} />
+         <Text style={{fontWeight:'semibold',fontSize:18,paddingLeft:10,color:Colors.custom.white}}>Logout</Text>
          </TouchableOpacity>
         </View>
         
@@ -61,16 +75,18 @@ const styles = StyleSheet.create({
         width:'100%',
         height:100,
         padding:10,
-        paddingTop:20
+        paddingTop:20,
+        flexDirection:'row'
     },
     container:{
         flex:1,
+        backgroundColor:Colors.custom.white
     },
     menuStyle:{
         flexDirection:'row',
-        justifyContent:'space-around',
+        justifyContent:'space-between',
         alignItems:'center',
-        backgroundColor:'#A5D6A7',
+        backgroundColor:Colors.custom.white,
         height:40,
         width:'100%',
         borderRadius:10,
@@ -81,7 +97,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-around',
         alignItems:'center',
-        backgroundColor:'#8D6E63',
+        backgroundColor:Colors.custom.blue,
         height:38,
         width:'auto',
         borderRadius:10,
@@ -91,11 +107,12 @@ const styles = StyleSheet.create({
     logout:{
         height:40,
         width:'100%',
-        backgroundColor:'rgb(243, 96, 94)',
+        backgroundColor:Colors.custom.black,
         marginTop:'auto',
         flexDirection:'row',
         alignItems:'center',
-        paddingLeft: 10,      
+        paddingLeft: 10,
+        marginBottom: 10      
         
     }
 })

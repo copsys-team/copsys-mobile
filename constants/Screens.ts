@@ -1,6 +1,6 @@
 export const DrawerMenu=[
     {
-        title:'User Management',icon:'',route:'user',MenuLists:[
+        title:'User Management',icon:'supervisor-account',iconType:'Feather',route:'user',MenuLists:[
             {title:'Manage Users',Icon:'',route:'manageUsers'},
             {title:'Roles & Permissions',Icon:'',route:'roles'},
             {title:'Profile',Icon:'',route:'profile'},
@@ -9,7 +9,7 @@ export const DrawerMenu=[
         ]
     },
     {
-        title:'Financial Services',icon:'',route:'user',MenuLists:[
+        title:'Financial Services',icon:'account-balance',iconType:'FontAwesome5',route:'user',MenuLists:[
             {title:'Collections',Icon:'',route:'collections'},
             {title:'Transacations',Icon:'',route:'transactions'},
             {title:'Loans',Icon:'',route:'loans'},
@@ -18,19 +18,19 @@ export const DrawerMenu=[
         ]
     },
     {
-        title:'HR & Payroll',icon:'',route:'user',MenuLists:[
+        title:'HR & Payroll',icon:'payments',iconType:'MaterialIcons',route:'user',MenuLists:[
             {title:'Payslips',Icon:'',route:'payslips'},
             {title:'HRM',Icon:'',route:'hrm'},
         ]
     },
     {
-        title:'Accounting and Reports',icon:'',route:'user',MenuLists:[
+        title:'Accounting and Reports',icon:'checklist',iconType:'Octicons',route:'user',MenuLists:[
             {title:'Accouting',Icon:'',route:'accounting'},
             {title:'Reports',Icon:'',route:'reports'},
         ]
     },
     {
-        title:'System Settings',icon:'',route:'user',MenuLists:[
+        title:'System Settings',icon:'settings',iconType:'Feather',route:'user',MenuLists:[
             {title:'Settings',Icon:'',route:'settings'},
         ]
     }

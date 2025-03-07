@@ -8,6 +8,7 @@ import Drawer from "expo-router/drawer";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import CustomDrawer from "@/components/ui/CustomDrawer";
+import { Colors } from "@/constants/Colors";
 
 
 
@@ -37,12 +38,11 @@ useEffect(()=>{
     <Drawer screenOptions={
       { drawerType:drawerType,
         overlayColor:'transparent',
-        drawerActiveBackgroundColor:'#A5D6A7',
-        drawerActiveTintColor:"black",
+        drawerActiveBackgroundColor:Colors.custom.blue,
+        drawerActiveTintColor:Colors.custom.white,
         drawerLabelStyle:styles.drawerLabel,
         drawerStyle:styles.drawerStyle,
         drawerItemStyle:styles.drawerItem,
-         
      }} drawerContent={(props)=><CustomDrawer{...props}/>}>
       <Drawer.Screen
         name="(tabs)"
@@ -51,7 +51,7 @@ useEffect(()=>{
           drawerLabel:'Dashboard',
           headerShown:false,
           title: "Dashboard",
-          drawerIcon: () => <FontAwesome size={20} name="dashboard" />,
+          drawerIcon: ({color}) => <FontAwesome size={20} name="dashboard" color={color}/>,
         }}
       />
     </Drawer>
