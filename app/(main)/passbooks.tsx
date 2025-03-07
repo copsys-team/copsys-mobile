@@ -1,4 +1,4 @@
-import ListPassbookLayout from "../../passbooks/lists";
+import ListPassbookLayout from "../passbooks/lists";
 
 
 export default function PassbooksLayout(){
