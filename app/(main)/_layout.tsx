@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, ScaledSize } from "react-native";
 import { isTablet } from "@/utils/deviceInfo";
 import { Redirect } from "expo-router";
 import { useScreenLock } from "@/hooks/useScreenLock";
@@ -9,10 +8,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import CustomDrawer from "@/components/ui/CustomDrawer";
 import { Colors } from "@/constants/Colors";
+import { useWindowDimensions } from "react-native";
 
-
+;
 
 export default function AppLayout() {
+  const {width}=useWindowDimensions()
   const checkIsTablet = isTablet();
  const [drawerType,setDrawerType]= useState<any>(null)
   
@@ -35,14 +36,12 @@ useEffect(()=>{
 
   return (
   <AuthGuard>
-    <Drawer screenOptions={
+    <Drawer  screenOptions={
       { drawerType:drawerType,
         overlayColor:'transparent',
-        drawerActiveBackgroundColor:Colors.custom.blue,
-        drawerActiveTintColor:Colors.custom.white,
-        drawerLabelStyle:styles.drawerLabel,
-        drawerStyle:styles.drawerStyle,
-        drawerItemStyle:styles.drawerItem,
+        drawerStyle:{width:width*0.75},
+        drawerInactiveTintColor:Colors.ligtButtons.primary,
+       
      }} drawerContent={(props)=><CustomDrawer{...props}/>}>
       <Drawer.Screen
         name="(tabs)"
@@ -50,10 +49,22 @@ useEffect(()=>{
         options={{
           drawerLabel:'Dashboard',
           headerShown:false,
+          drawerActiveBackgroundColor:Colors.custom.blue,
+          drawerActiveTintColor:Colors.custom.white,
+          drawerLabelStyle:styles.drawerLabel,
+          drawerItemStyle:styles.drawerItem,
           title: "Dashboard",
           drawerIcon: ({color}) => <FontAwesome size={20} name="dashboard" color={color}/>,
         }}
       />
+      <Drawer.Screen
+        name="drawerScreens"
+        
+        options={{
+          headerTitle:'',
+          headerShadowVisible:false,
+          drawerItemStyle:{height:0},
+        }}/>
     </Drawer>
   </AuthGuard>
   );
@@ -64,12 +75,7 @@ const styles = StyleSheet.create({
     fontSize:18,
     fontWeight:'semibold',
   },
-  drawerStyle:{
-    width:240,
-    height:'100%'
-  },
   drawerItem:{
-    borderTopRightRadius:10,
-    borderBottomLeftRadius:10
+    borderRadius:25
   }
 })
