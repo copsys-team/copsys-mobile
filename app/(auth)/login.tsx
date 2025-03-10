@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Text } from "@rneui/themed";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
@@ -11,12 +11,16 @@ import * as Yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "@/components/common/TextInput";
 import { CustomButton } from "@/components/common/CustomButton";
-import { PasswordInput } from "@/components/common/PasswordInput";
 import { Link, router } from "expo-router";
 import { isTablet } from "@/utils/deviceInfo";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import { useTenantStore } from "@/hooks/stores/useTenantStore";
-
+import Input from "@/components/ui/input";
+import RememberMe from "@/components/ui/rememberMe"
+import { Colors } from "@/constants/Colors";
+import OrganizationList from "@/components/ui/OrganizationList";
+import AuthDivider from "@/components/ui/AuthDivider";
+import Animated from "react-native-reanimated";
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
   auth_field: Yup.string().required(),
@@ -39,25 +43,41 @@ const LoginSchema = Yup.object().shape({
 });
 
 const LoginScreen = () => {
-  const { height } = useWindowDimensions();
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+  const { height,width } = useWindowDimensions();
   const checkIsTablet = isTablet();
   const { login } = useAuthStore();
   const { setCurrentTenantId } = useTenantStore();
+ 
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{flex:1}}>
       <SafeAreaView style={[styles.container, { height: height }]}>
-        <Card
-          containerStyle={[styles.content, checkIsTablet && { width: 500 }]}
-        >
-          <Card.Title h3>SignIn</Card.Title>
-          <TextInput
-            label={"Email/Phone"}
-            placeholder="Enter your email or phone number"
-          />
-          <PasswordInput label={"Password"} placeholder="Enter your password" />
+        <View style={[styles.content, checkIsTablet && { width: 500 }]}>
+
+          <Text style={styles.title}>Welcome back! Please Login To Your Account</Text>
+          <Text style={styles.label}>Organization</Text>
+         <OrganizationList/>
+          <Text style={styles.label}>Email Address</Text>
+
+          <Input placeholder={'Enter your email'}
+           value={email} changeText={(text:string)=>setEmail(text)} />
+
+          <Text style={styles.label}>Password</Text>
+
+          <Input placeholder={'Enter your password'}
+           value={password} changeText={(text:string)=>setPassword(text)}/>
+           <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginVertical:20}}>
+           <RememberMe/>
+           <Link href={'/(auth)/forgot'}>
+           <Text style={{color:Colors.ligtButtons.accent}}>Forgot Password?</Text>
+           </Link>
+           </View>
           <CustomButton
-            title={"Login"}
+          buttonStyle={{height:42,marginVertical:20}}
+          color={Colors.ligtButtons.primary}
+            title={"Continue Now"}
             onPress={() => {
               setCurrentTenantId("abc123");
               login(
@@ -70,16 +90,13 @@ const LoginScreen = () => {
                 { refreshToken: "123", accessToken: "122" }
               );
 
-              router.replace("/(main)");
+              router.replace('/(main)/(tabs)');
             }}
           />
-          <View style={styles.forgotContent}>
-            <Button type="clear">Forgot Password?</Button>
-            <MaterialIcons size={14} name="arrow-forward" />
-          </View>
-        </Card>
+          <AuthDivider/>
+        </View>
       </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
   );
 };
 
@@ -90,14 +107,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding:20,
+    backgroundColor:Colors.light.background
   },
   header: {
     alignItems: "center",
   },
-  content: {
-    rowGap: 16,
-    alignItems: "center",
-    width: 380,
+  content:{
+    padding:20,
   },
   forgotText: {
     textAlign: "center",
@@ -109,4 +126,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  label:{
+    marginTop:10,
+    marginBottom:5,
+    fontSize:16,
+    fontWeight:600
+  },
+  title:{
+    fontSize:13,
+    alignSelf:'center',
+    marginBottom:10,
+    fontWeight:400
+  }
 });
