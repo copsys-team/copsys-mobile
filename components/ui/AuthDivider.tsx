@@ -12,12 +12,12 @@ export default function AuthDivider(){
 }
 const styles = StyleSheet.create({
     line:{
-        backgroundColor:Colors.ligtButtons.primary,
+        backgroundColor:Colors.custom.blue,
         height:1,
         width:104
     },
     text:{
-        color:Colors.ligtButtons.primary,
+        color:Colors.custom.blue,
         fontSize:12
     }
 })

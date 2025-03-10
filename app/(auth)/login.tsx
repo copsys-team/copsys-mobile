@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, Text } from "@rneui/themed";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Text } from "@rneui/themed";
 import {
   ScrollView,
   StyleSheet,
@@ -9,7 +8,6 @@ import {
 } from "react-native";
 import * as Yup from "yup";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TextInput } from "@/components/common/TextInput";
 import { CustomButton } from "@/components/common/CustomButton";
 import { Link, router } from "expo-router";
 import { isTablet } from "@/utils/deviceInfo";
@@ -20,7 +18,7 @@ import RememberMe from "@/components/ui/rememberMe"
 import { Colors } from "@/constants/Colors";
 import OrganizationList from "@/components/ui/OrganizationList";
 import AuthDivider from "@/components/ui/AuthDivider";
-import Animated from "react-native-reanimated";
+
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
   auth_field: Yup.string().required(),
@@ -45,7 +43,7 @@ const LoginSchema = Yup.object().shape({
 const LoginScreen = () => {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
-  const { height,width } = useWindowDimensions();
+  const { height } = useWindowDimensions();
   const checkIsTablet = isTablet();
   const { login } = useAuthStore();
   const { setCurrentTenantId } = useTenantStore();
@@ -71,12 +69,12 @@ const LoginScreen = () => {
            <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginVertical:20}}>
            <RememberMe/>
            <Link href={'/(auth)/forgot'}>
-           <Text style={{color:Colors.ligtButtons.accent}}>Forgot Password?</Text>
+           <Text style={{color:Colors.custom.brown}}>Forgot Password?</Text>
            </Link>
            </View>
           <CustomButton
           buttonStyle={{height:42,marginVertical:20}}
-          color={Colors.ligtButtons.primary}
+          color={Colors.custom.blue}
             title={"Continue Now"}
             onPress={() => {
               setCurrentTenantId("abc123");

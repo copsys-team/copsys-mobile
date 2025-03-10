@@ -12,7 +12,7 @@ const [check,setCheck]=useState(false)
                    size={24} 
                    color={check?'black':'grey'} />
         
-       <Text style={{color:Colors.ligtButtons.primary,paddingLeft:10}}>Remember me</Text>
+       <Text style={{color:Colors.custom.blue,paddingLeft:10}}>Remember me</Text>
        </View>         
         </TouchableOpacity>           
     )

@@ -1,12 +1,14 @@
-import {View,Text} from "react-native"
+import {View,Text,TextInput, StyleSheet} from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import GoBack from "@/components/common/GoBack"
 import { router } from "expo-router"
-import Input from "@/components/ui/input"
+import { useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { CustomButton } from "@/components/common/CustomButton"
+
 export default function ForgotScreen(){
-    return(<SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background}}>
+    const[value,setValue]=useState('')
+    return(<SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background,alignItems:'center'}}>
 <View > 
     <GoBack onPress={()=>router.back()}/>
      <Text style={{paddingVertical:20,fontSize:20,fontWeight:600}}>Forgot password</Text>
@@ -23,12 +25,28 @@ export default function ForgotScreen(){
             lineHeight:20,
             paddingBottom:5
             }}>Your email</Text>
-            <Input/>   
+            <View style={{alignItems:'center'}}>
+            <TextInput style={styles.input}
+            placeholder="contact@copsys.com"
+            placeholderTextColor={'black'}
+            onChangeText={(text)=>{setValue(text)}}
+            value={value}/> 
+            </View>  
             <CustomButton
             title={'Reset Password'}
-            color={Colors.ligtButtons.primary}
+            color={Colors.custom.blue}
             buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}/>
  </View>
  </SafeAreaView>
     )
 }
+const styles=StyleSheet.create({
+    input:{
+        borderWidth:2,
+        borderRadius:12,
+        borderColor:'#E1E1E1',
+        height:54,
+        paddingHorizontal:10,
+        width:314
+    }
+})
