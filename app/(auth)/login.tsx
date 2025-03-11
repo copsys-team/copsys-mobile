@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import Oauth2 from "@/components/ui/Oauth2";
 import { Text } from "@rneui/themed";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
   useWindowDimensions,
@@ -92,6 +94,10 @@ const LoginScreen = () => {
             }}
           />
           <AuthDivider/>
+            <View style={{flexDirection:'row',justifyContent:'space-between'}}>               
+                      <Oauth2 location={'apple'} onPress={()=>alert("feature still under development 🚀")}/>
+                      <Oauth2 location={'facebook'} onPress={()=>alert("feature still under development 🚀")}/>
+                      <Oauth2 location={'google'} onPress={()=>alert("feature still under development 🚀")}/></View>
         </View>
       </SafeAreaView>
       </ScrollView>

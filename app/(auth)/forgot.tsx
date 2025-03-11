@@ -5,6 +5,8 @@ import { router } from "expo-router"
 import { useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { CustomButton } from "@/components/common/CustomButton"
+import Oauth2 from "@/components/ui/Oauth2"
+import { Image } from "react-native"
 
 export default function ForgotScreen(){
     const[value,setValue]=useState('')
@@ -36,6 +38,7 @@ export default function ForgotScreen(){
             title={'Reset Password'}
             color={Colors.custom.blue}
             buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}/>
+          
  </View>
  </SafeAreaView>
     )
