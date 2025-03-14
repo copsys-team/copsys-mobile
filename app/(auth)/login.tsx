@@ -20,31 +20,19 @@ import RememberMe from "@/components/ui/rememberMe"
 import { Colors } from "@/constants/Colors";
 import OrganizationList from "@/components/ui/OrganizationList";
 import AuthDivider from "@/components/ui/AuthDivider";
+import { Formik } from "formik";
 
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
-  auth_field: Yup.string().required(),
   email: Yup.string()
     .email("Invalid email address")
-    .when("auth_field", {
-      is: "email",
-      then: (schema: any) => schema.required("Email is required"),
-      otherwise: (schema: any) => schema.notRequired(),
-    }),
-  phone: Yup.string()
-    .matches(/^\+?[0-9]{10,15}$/, "Invalid phone number")
-    .when("auth_field", {
-      is: "phone",
-      then: (schema: any) => schema.required("Phone number is required"),
-    }),
+    .required("Email is required").matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,"Invalid email address"),
   password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
+    .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
 
 const LoginScreen = () => {
-  const [email,setEmail]=useState('')
-  const [password,setPassword]=useState('')
   const { height } = useWindowDimensions();
   const checkIsTablet = isTablet();
   const { login } = useAuthStore();
@@ -59,16 +47,38 @@ const LoginScreen = () => {
           <Text style={styles.title}>Welcome back! Please Login To Your Account</Text>
           <Text style={styles.label}>Organization</Text>
          <OrganizationList/>
-          <Text style={styles.label}>Email Address</Text>
 
-          <Input placeholder={'Enter your email'}
-           value={email} changeText={(text:string)=>setEmail(text)} />
+        <Formik initialValues={{email:'',password:''}}
+        validationSchema={LoginSchema}
+        onSubmit={(values)=>{setCurrentTenantId("abc123")
+          login(
+            {
+              email:values.email,
+              password:values.password
+            },
+            { refreshToken: "123", accessToken: "122" }
+          );
+          router.replace('/(main)/(tabs)');}}>
+          {({handleChange,handleSubmit,errors,setFieldTouched,touched})=>(
+            <>
+             <Text style={styles.label}>Email Address</Text>
 
-          <Text style={styles.label}>Password</Text>
+<Input placeholder={'Enter your email'}
+  changeText={handleChange("email")}
+   focused={()=>setFieldTouched('email')}
+   color={touched.email&&errors.email?'red':
+    touched.email&&!errors.email?'green':'#02012B8F'}/>
+  {touched.email&&errors.email&&<Text style={styles.error}>*{errors.email}</Text>}
 
-          <Input placeholder={'Enter your password'}
-           value={password} changeText={(text:string)=>setPassword(text)}/>
-           <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginVertical:20}}>
+<Text style={styles.label}>Password</Text>
+
+<Input placeholder={'Enter your password'}
+ changeText={handleChange("password")} 
+ focused={()=>setFieldTouched('password')}
+ color={touched.password&&errors.password?'red':
+ touched.password&&!errors.password?'green':'#02012B8F'}/>
+ {touched.password&&errors.password&&<Text style={styles.error}>*{errors.password}</Text>}
+<View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',marginVertical:20}}>
            <RememberMe/>
            <Link href={'/(auth)/forgot'}>
            <Text style={{color:Colors.custom.brown}}>Forgot Password?</Text>
@@ -78,26 +88,18 @@ const LoginScreen = () => {
           buttonStyle={{height:42,marginVertical:20}}
           color={Colors.custom.blue}
             title={"Continue Now"}
-            onPress={() => {
-              setCurrentTenantId("abc123");
-              login(
-                {
-                  id: 1,
-                  name: "Eric Mensah",
-                  phone: "",
-                  sex: "female",
-                },
-                { refreshToken: "123", accessToken: "122" }
-              );
-
-              router.replace('/(main)/(tabs)');
-            }}
+            onPress={()=>handleSubmit()}
           />
+            </>
+          )
+
+          }</Formik> 
+         
           <AuthDivider/>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>               
-                      <Oauth2 location={'apple'} onPress={()=>alert("feature still under development 🚀")}/>
-                      <Oauth2 location={'facebook'} onPress={()=>alert("feature still under development 🚀")}/>
-                      <Oauth2 location={'google'} onPress={()=>alert("feature still under development 🚀")}/></View>
+                      <Oauth2 location={'facebook'} onPress={()=>alert("feature still under development 😊 🛠️")}/>
+                      <Oauth2 location={'google'} onPress={()=>alert("feature still under development 😊 🛠️")}/>
+                      <Oauth2 location={'apple'} onPress={()=>alert("feature still under development 😊 🛠️")}/></View>
         </View>
       </SafeAreaView>
       </ScrollView>
@@ -141,5 +143,8 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     marginBottom:10,
     fontWeight:400
+  },
+  error:{
+    color:'red'
   }
 });

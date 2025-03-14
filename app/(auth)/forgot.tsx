@@ -37,7 +37,8 @@ export default function ForgotScreen(){
             <CustomButton
             title={'Reset Password'}
             color={Colors.custom.blue}
-            buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}/>
+            buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}
+            onPress={()=>router.push('/(auth)/verifyOtp')}/>
           
  </View>
  </SafeAreaView>

@@ -6,10 +6,10 @@ import { AuthTokens, User } from "@/types/core";
 // Zustand Store with Persist Middleware
 export type AuthState = {
   organization: String ;
-  user: User | null;
+  user: Object | null;
   tokens: AuthTokens | null;
   loggedIn: boolean;
-  login: (user: User, tokens: AuthTokens) => void;
+  login: (user: Object, tokens: AuthTokens) => void;
   logout: () => void;
   setorganization: (organization: String) => void;
 };
