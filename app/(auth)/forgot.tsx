@@ -5,14 +5,13 @@ import { router } from "expo-router"
 import { useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { CustomButton } from "@/components/common/CustomButton"
-import Oauth2 from "@/components/ui/Oauth2"
-import { Image } from "react-native"
+
 
 export default function ForgotScreen(){
     const[value,setValue]=useState('')
     return(<SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background,alignItems:'center'}}>
 <View > 
-    <GoBack onPress={()=>router.back()}/>
+    <GoBack onPress={()=>router.push('/(auth)/login')}/>
      <Text style={{paddingVertical:20,fontSize:20,fontWeight:600}}>Forgot password</Text>
      <Text style={{fontWeight:600,
         fontSize:16,

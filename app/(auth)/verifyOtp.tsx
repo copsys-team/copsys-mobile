@@ -44,7 +44,8 @@ else{
                </View>
                <CustomButton
                 title='Verify'
-                 color={Colors.custom.blue} 
+                 color={Colors.custom.blue}
+                 onPress={()=>router.push('/(auth)/setPassword')} 
                  disabled={done===false}
                   disabledStyle={styles.disabled}
                   buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}/>          

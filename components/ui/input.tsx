@@ -6,7 +6,11 @@ export default function Input ({value,placeholder,changeText,focused,color}:any)
     const [notsecured,setNotSecured] = useState(false)
     return <View style={[styles.input,{width:width*0.85,borderColor:color}]}>
            <TextInput
-           secureTextEntry={placeholder==='Enter your password'&&!notsecured}
+           secureTextEntry={(
+            placeholder==='Enter your password'||
+            placeholder==='Enter new password'||
+            placeholder==='Re-type new password'
+           )&&!notsecured}
             value={value}
             onBlur={focused}
             onChangeText={changeText}
@@ -14,7 +18,9 @@ export default function Input ({value,placeholder,changeText,focused,color}:any)
             cursorColor={'black'}
             style={[{marginRight:'auto',fontSize:16,fontWeight:600,flex:1},{borderColor:'#02012B8F'}]}
             />
-            {placeholder==='Enter your password'&&
+            {(placeholder==='Enter your password'||
+            placeholder==='Enter new password'||
+            placeholder==='Re-type new password')&&
             <Entypo 
             name={notsecured?'eye':'eye-with-line'} 
             size={24}
