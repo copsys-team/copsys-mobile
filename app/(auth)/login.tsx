@@ -37,6 +37,7 @@ const LoginScreen = () => {
   const checkIsTablet = isTablet();
   const { login } = useAuthStore();
   const { setCurrentTenantId } = useTenantStore();
+  const [pressed,setPressed]=useState(false)
  
 
   return (
@@ -44,13 +45,14 @@ const LoginScreen = () => {
       <SafeAreaView style={[styles.container, { height: height }]}>
         <View style={[styles.content, checkIsTablet && { width: 500 }]}>
 
-          <Text style={styles.title}>Welcome back! Please Login To Your Account</Text>
+          <Text style={styles.title}>❤️ Welcome back! Please Login To Your Account</Text>
           <Text style={styles.label}>Organization</Text>
          <OrganizationList/>
 
         <Formik initialValues={{email:'',password:''}}
         validationSchema={LoginSchema}
-        onSubmit={(values)=>{setCurrentTenantId("abc123")
+        onSubmit={(values)=>{
+          setCurrentTenantId("abc123")
           login(
             {
               email:values.email,
@@ -58,7 +60,8 @@ const LoginScreen = () => {
             },
             { refreshToken: "123", accessToken: "122" }
           );
-          router.replace('/(main)/(tabs)');}}>
+          router.push('/(auth)/loginModal')
+          }}>
           {({handleChange,handleSubmit,errors,setFieldTouched,touched})=>(
             <>
              <Text style={styles.label}>Email Address</Text>
@@ -92,15 +95,16 @@ const LoginScreen = () => {
           />
             </>
           )
-
-          }</Formik> 
+}</Formik> 
          
           <AuthDivider/>
             <View style={{flexDirection:'row',justifyContent:'space-between'}}>               
                       <Oauth2 location={'facebook'} onPress={()=>alert("feature still under development 😊 🛠️")}/>
                       <Oauth2 location={'google'} onPress={()=>alert("feature still under development 😊 🛠️")}/>
                       <Oauth2 location={'apple'} onPress={()=>alert("feature still under development 😊 🛠️")}/></View>
+                      
         </View>
+      
       </SafeAreaView>
       </ScrollView>
   );
