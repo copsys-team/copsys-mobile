@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
     fontSize:13,
     alignSelf:'center',
     marginBottom:10,
-    fontWeight:400
+    fontWeight:400,
+    textAlign:'center'
   },
   error:{
     color:'red'

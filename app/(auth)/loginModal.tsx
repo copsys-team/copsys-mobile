@@ -6,7 +6,7 @@ import { BlurView } from "expo-blur";
 import { Redirect, router } from "expo-router";
 import { Stack } from "expo-router";
 import { useState } from "react";
-import { Text,KeyboardAvoidingView, Pressable, TouchableOpacity, useWindowDimensions, View, StyleSheet, TextInput, Platform } from "react-native";
+import { Text,KeyboardAvoidingView, Pressable, TouchableOpacity, useWindowDimensions, View, StyleSheet, TextInput, Platform, ScrollView } from "react-native";
 import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 export default function LoginModal() {
@@ -20,6 +20,7 @@ export default function LoginModal() {
       <Pressable  style={styles.modalOverlay} onPress={()=>router.back()}/>
         
          <View  style={{borderTopLeftRadius:50,borderTopRightRadius:50,height:height/2,marginTop:'auto',paddingTop:30,paddingHorizontal:20,backgroundColor:'white'}}>
+         <ScrollView showsVerticalScrollIndicator={false}>
          <TouchableOpacity onPress={()=>router.back()} >
           <Text style={{color:'royalblue',fontWeight:600,fontSize:16}}>Cancel</Text>
          </TouchableOpacity>
@@ -45,6 +46,7 @@ export default function LoginModal() {
           color={Colors.custom.blue}
           onPress={()=>router.push('/(main)/(tabs)')}/>
          </View>
+         </ScrollView>
        </View>
       </View>
     
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   },
   button:{
     width:300,
-    marginTop:30
+    marginVertical:30
   }
 
 
