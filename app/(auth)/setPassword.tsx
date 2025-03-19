@@ -8,6 +8,8 @@ import { router } from "expo-router";
 import { StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as Yup from 'yup';
+import { useEffect, useState } from "react";
+import Animation from "@/components/ui/Animation";
 
 const LoginSchema = Yup.object().shape({
   newPassword: Yup.string()
@@ -17,16 +19,32 @@ const LoginSchema = Yup.object().shape({
     .required("Confirm new password"),
 });
 export default function SetPassword(){
+   const [animationComplete,setAnimationComplete]=useState(false)
+   const[loading,setLoading]=useState(false)
+   const[success,setSuccess]=useState(false)
+   
+   useEffect(()=>{
+    if(animationComplete===true){setSuccess(false)
+      console.log(animationComplete) 
+      router.push('/(auth)/login')}
+  },[animationComplete])
+
+
     return(
      <SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background,alignItems:'center'}}>
         <View>
       <GoBack onPress={()=>router.push('/(auth)/forgot')}/>
+        <Animation 
+        loading={loading} 
+        success={success} 
+        onAnimationFinish={(data:any)=>{console.log(data)
+          setAnimationComplete(data)}}/>
       <Text style={styles.title}>Set a new password</Text>
       <Text style={styles.information}>Create a new password.Ensure it differs from previous ones for security</Text>
       <Formik initialValues={{newPassword:'',retypePassword:''}}
       validationSchema={LoginSchema} 
-      onSubmit={(values)=>{console.log(values)
-        router.push('/(auth)/login')
+      onSubmit={(values)=>{setSuccess(true)
+       
       }}>
         {({handleChange,values,handleSubmit,errors,setFieldTouched,touched,setErrors})=>(
           <>

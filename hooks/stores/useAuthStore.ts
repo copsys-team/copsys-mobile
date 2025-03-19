@@ -22,7 +22,7 @@ export const useAuthStore = create<AuthState>()(
       tokens: null,
       loggedIn: false,
       // Login function
-      login: (user, tokens) =>
+      login: (user, tokens) => 
         set({ user, tokens, loggedIn: user && !!tokens }),
 
       // Logout function
