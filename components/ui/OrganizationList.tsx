@@ -1,10 +1,12 @@
 import { StyleSheet,Text, TouchableOpacity, View,Modal } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Animated from "react-native-reanimated";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import {BlurView} from 'expo-blur';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { API_URL } from "@/contexts/auth";
+import axios from "axios";
 
 type measureProps=[number,number,number,number,number,number]
 
@@ -12,9 +14,24 @@ type measureProps=[number,number,number,number,number,number]
 const organizations=[{name:'Amed Organization'},{name:'Justice Organization'},{name:'Goblex industries'}]
 export default function OrganizationList(){
     const[pressed,setPressed]=useState(false)
+    const[data,setData]=useState(null)
     const buttonRef = useRef<any>(null)
     const[buttonPosition,setButtonPosition]=useState(0)
     const{setorganization,organization}=useAuthStore()
+    useEffect(()=>{
+const LoadOrganizations = async()=>{
+    try{
+const response = await axios.get(`${API_URL}/tenants`)
+console.log(response.data.result)
+setData(response.data.result)}
+catch(error:any){
+    console.log("There was an error",error)
+    alert(error.message)
+}
+}
+LoadOrganizations()
+    },[])
+   
     return(
         <View>
             <TouchableOpacity ref={buttonRef} style={styles.button}
@@ -47,13 +64,13 @@ export default function OrganizationList(){
              style={[styles.dropDownContainer,{top:buttonPosition,borderRadius:10,overflow:'hidden'}]}>
             <Animated.FlatList
            contentContainerStyle={styles.contentContainer}
-           data={organizations}
+           data={data}
            renderItem={({item})=>{
             return(
                 
                     <TouchableOpacity style={styles.organizations} onPress={()=>{
                         setPressed(false)
-                        setorganization(item.name)
+                        setorganization(item?.name)
                     }}><MaterialIcons name="verified-user" style={{paddingRight:10}} size={24} color="black" />
                         <Text style={{fontSize:18}}>{item.name}</Text>
                     </TouchableOpacity>

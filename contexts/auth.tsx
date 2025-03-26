@@ -1,42 +1,62 @@
 import React, {
   createContext,
   useContext,
-  useState,
   useEffect,
-  ReactNode,
+  useState,
 } from "react";
-import { useRouter, useSegments } from "expo-router";
+import axios from "axios";
+import { useAuthStore } from "@/hooks/stores/useAuthStore";
+import { useTenantStore } from "@/hooks/stores/useTenantStore";
 
-export const AuthContext = createContext<any>(undefined);
+ const AuthContext = createContext<any>({});
+export const useAuth=()=>{
+return(useContext(AuthContext))
+}
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
-  const segments = useSegments();
+export const API_URL = 'https://copsys-api.erecox.com';
+ 
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      // Simulating an authentication check
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+export const AuthProvider = ({ children }:any) => {
+  const [isLoading,setIsLoading]=useState(false)
+  const {login,token}=useAuthStore()
+  const {currentTenantId}=useTenantStore()
+  const Login = async(email:string,password:string) => {
+    try{setIsLoading(true)
+      const response= await axios.post(`${API_URL}/${currentTenantId}/users/login`,{email,password})
+    
+      login({id:response.data.user.id,
+        name:response.data.user.name,
+        email:response.data.user.email,
+        is_verified:response.data.user.is_verified
+      },{token:response.data.access_token,tokenType:response.data.token_type}) 
+      console.log('login succesful')
+    }
+    catch(e:any){
+      console.log('There was error:',e.response.data)
+      throw e
+    }
+    finally{setIsLoading(false)}
 
-      const fakeUser = { id: 1, name: "Eric" }; // Set this to an object to simulate login
-      setUser(fakeUser);
-      setLoading(false);
+  };
+  const Tenants = async()=>{
+    try{
+    const response = await axios.get(`${API_URL}/tenants`)
+    console.log(response)}
+    catch(e){
+      console.log('There was error: ',e)
+    }
+  }
 
-      // If no user, redirect to login
-      if (!fakeUser && segments[0] !== "login") {
-        router.replace("/login");
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  const login = () => {};
-
+  const Register = async()=>{
+    try{const respond = await axios.post(`${API_URL}/kibbuz/users/register`,{name:'williams',email:'kingofintelligence8@gmail.com',password:'hellothere',password_confirmation:'hellothere'})
+  console.log(respond)}
+  catch(e){
+    console.log(e)
+  }
+  }
+const values = {Login,Register,isLoading,Tenants}
   return (
-    <AuthContext.Provider value={{ user, login, loading }}>
+    <AuthContext.Provider value={values}>
       {children}
     </AuthContext.Provider>
   );

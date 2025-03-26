@@ -2,21 +2,27 @@ import { CustomButton } from "@/components/common/CustomButton";
 import { Colors } from "@/constants/Colors";
 import { useAuthStore } from "@/hooks/stores/useAuthStore";
 import { useTenantStore } from "@/hooks/stores/useTenantStore";
-import { BlurView } from "expo-blur";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router"
 import { Stack } from "expo-router";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import { useAuth } from "@/contexts/auth";
 import { Text,KeyboardAvoidingView, Pressable, TouchableOpacity, useWindowDimensions, View, StyleSheet, TextInput, Platform, ScrollView } from "react-native";
-import Animated, { SlideInDown, SlideOutDown } from "react-native-reanimated";
+import Animation from "@/components/ui/Animation";
+
 
 export default function LoginModal() {
   const [id,setId]=useState('')
-  const { width, height } = useWindowDimensions();
- const {organization,login}=useAuthStore()
+  const {height } = useWindowDimensions();
+  const{Login,isLoading,Tenants}=useAuth()
+  const[success,setSuccess]=useState(false);
+ const {organization,user}=useAuthStore()
  const {setCurrentTenantId}=useTenantStore()
   return (<>
     <Stack.Screen name="loginModal" options={{presentation:'transparentModal',animation:'slide_from_bottom'}}/>
     <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.5)'}}>
+      <Animation 
+      loading={isLoading===true?true:false} 
+      success={success}/>
       <Pressable  style={styles.modalOverlay} onPress={()=>router.back()}/>
         
          <View  style={{borderTopLeftRadius:50,borderTopRightRadius:50,height:height/2,marginTop:'auto',paddingTop:30,paddingHorizontal:20,backgroundColor:'white'}}>
@@ -44,7 +50,11 @@ export default function LoginModal() {
          buttonStyle={styles.button} 
          title='Move to Dashboard'
           color={Colors.custom.blue}
-          onPress={()=>router.push('/(main)/(tabs)')}/>
+          onPress={async()=>{
+            setCurrentTenantId(id)
+             await Tenants()
+            await Login(user?.email,user?.password)
+            }}/>
          </View>
          </ScrollView>
        </View>

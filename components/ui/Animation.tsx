@@ -1,6 +1,6 @@
 import { Modal,View } from "react-native";
 import LottieView from "lottie-react-native";
-import { useEffect, useState } from "react";
+
 
 const Animation=({loading,success,onAnimationFinish}:any)=>{
     const loadingSource = require('@/assets/animations/loading.json')

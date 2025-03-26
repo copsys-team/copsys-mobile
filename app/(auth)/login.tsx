@@ -21,6 +21,7 @@ import { Colors } from "@/constants/Colors";
 import OrganizationList from "@/components/ui/OrganizationList";
 import AuthDivider from "@/components/ui/AuthDivider";
 import { Formik } from "formik";
+import { useAuth } from "@/contexts/auth"
 
 // Validation schema using Yup
 const LoginSchema = Yup.object().shape({
@@ -37,7 +38,8 @@ const LoginScreen = () => {
   const checkIsTablet = isTablet();
   const { login } = useAuthStore();
   const { setCurrentTenantId } = useTenantStore();
-  const [pressed,setPressed]=useState(false)
+  const {Login,Register}=useAuth();
+  
  
 
   return (
@@ -51,16 +53,10 @@ const LoginScreen = () => {
 
         <Formik initialValues={{email:'',password:''}}
         validationSchema={LoginSchema}
-        onSubmit={(values)=>{
-          setCurrentTenantId("abc123")
-          login(
-            {
-              email:values.email,
-              password:values.password
-            },
-            { refreshToken: "123", accessToken: "122" }
-          );
-          router.push('/(auth)/loginModal')
+        onSubmit={async(values)=>{
+          await Register()
+          login({email:values.email,password:values.password},{})
+          router.push('/(auth)/loginModal');
           }}>
           {({handleChange,handleSubmit,errors,setFieldTouched,touched})=>(
             <>
