@@ -8,6 +8,7 @@ import { useLayoutEffect, useState } from "react";
 import { useAuth } from "@/contexts/auth";
 import { Text,KeyboardAvoidingView, Pressable, TouchableOpacity, useWindowDimensions, View, StyleSheet, TextInput, Platform, ScrollView } from "react-native";
 import Animation from "@/components/ui/Animation";
+import { logger } from "react-native-reanimated/lib/typescript/logger";
 
 
 export default function LoginModal() {
@@ -15,7 +16,7 @@ export default function LoginModal() {
   const {height } = useWindowDimensions();
   const{Login,isLoading,Tenants}=useAuth()
   const[success,setSuccess]=useState(false);
- const {organization,user}=useAuthStore()
+ const {organization,user,email,password,logger}=useAuthStore()
  const {setCurrentTenantId}=useTenantStore()
   return (<>
     <Stack.Screen name="loginModal" options={{presentation:'transparentModal',animation:'slide_from_bottom'}}/>
@@ -50,11 +51,15 @@ export default function LoginModal() {
          buttonStyle={styles.button} 
          title='Move to Dashboard'
           color={Colors.custom.blue}
-          onPress={async()=>{
-            setCurrentTenantId(id)
-             await Tenants()
-            await Login(user?.email,user?.password)
-            }}/>
+          onPress={async()=>{            
+            const done= await Login(email,password)
+            if(done===true){
+            if(id==user?.id){
+              logger(null,null)
+              router.push('/(main)/(tabs)')
+            }
+            else{alert('Sorry,you entered an invalid organization id 🤔')}
+            }}}/>
          </View>
          </ScrollView>
        </View>

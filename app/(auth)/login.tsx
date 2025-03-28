@@ -36,9 +36,9 @@ const LoginSchema = Yup.object().shape({
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
   const checkIsTablet = isTablet();
-  const { login } = useAuthStore();
+  const { logger } = useAuthStore();
   const { setCurrentTenantId } = useTenantStore();
-  const {Login,Register}=useAuth();
+  const {Login}=useAuth();
   
  
 
@@ -54,8 +54,7 @@ const LoginScreen = () => {
         <Formik initialValues={{email:'',password:''}}
         validationSchema={LoginSchema}
         onSubmit={async(values)=>{
-          await Register()
-          login({email:values.email,password:values.password},{})
+          logger(values.email,values.password)
           router.push('/(auth)/loginModal');
           }}>
           {({handleChange,handleSubmit,errors,setFieldTouched,touched})=>(

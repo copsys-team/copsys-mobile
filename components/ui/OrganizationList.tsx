@@ -7,6 +7,8 @@ import {BlurView} from 'expo-blur';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { API_URL } from "@/contexts/auth";
 import axios from "axios";
+import { useTenantStore } from "@/hooks/stores/useTenantStore";
+import { ActivityIndicator } from "react-native";
 
 type measureProps=[number,number,number,number,number,number]
 
@@ -17,6 +19,7 @@ export default function OrganizationList(){
     const[data,setData]=useState(null)
     const buttonRef = useRef<any>(null)
     const[buttonPosition,setButtonPosition]=useState(0)
+    const{setCurrentTenantId}=useTenantStore()
     const{setorganization,organization}=useAuthStore()
     useEffect(()=>{
 const LoadOrganizations = async()=>{
@@ -31,6 +34,13 @@ catch(error:any){
 }
 LoadOrganizations()
     },[])
+    if(!data){
+        return(<View style={{flexDirection:'row',gap:5}}>
+            <Text style={{fontSize:14,color:'lightgray'}}>Loading Available Organizations</Text>
+            <ActivityIndicator size={14} color={'gray'}/>
+            </View>
+        )
+    }
    
     return(
         <View>
@@ -71,6 +81,7 @@ LoadOrganizations()
                     <TouchableOpacity style={styles.organizations} onPress={()=>{
                         setPressed(false)
                         setorganization(item?.name)
+                        setCurrentTenantId(item?.id)
                     }}><MaterialIcons name="verified-user" style={{paddingRight:10}} size={24} color="black" />
                         <Text style={{fontSize:18}}>{item.name}</Text>
                     </TouchableOpacity>

@@ -5,11 +5,14 @@ import { AuthTokens, User } from "@/types/core";
 
 // Zustand Store with Persist Middleware
 export type AuthState = {
+  email: string | null;
+  password: string | null;
   organization: any ;
-  user: Object | null;
-  token: Object | null;
+  user: any;
+  token: any;
   loggedIn: boolean;
-  login: (user: Object, token: Object) => void;
+  logger:(email: string | null, password:string | null) => void;
+  login: (user: any, token: any) => void;
   logout: () => void;
   setorganization: (organization: String) => void;
 };
@@ -18,6 +21,8 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       organization:'Select Organization',
+      email: null,
+      password: null,
       user: null,
       token: null,
       loggedIn: false,
@@ -28,6 +33,7 @@ export const useAuthStore = create<AuthState>()(
       // Logout function
       logout: () => set({ user: null, token: null, loggedIn: false,organization:'Select Organization' }),
       setorganization: (organization) => set({organization}),
+      logger: (email,password) => set({email,password})
     }),
     {
       name: "auth-storage", // Storage key

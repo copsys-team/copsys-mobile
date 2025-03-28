@@ -1,5 +1,7 @@
 import { AuthProvider } from "@/contexts/auth";
-import { Stack } from "expo-router";
+import { useAuthStore } from "@/hooks/stores/useAuthStore";
+import { router, Stack } from "expo-router";
+
 
 export default function AuthLayout() {
 
