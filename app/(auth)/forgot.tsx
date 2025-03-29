@@ -5,9 +5,11 @@ import { router } from "expo-router"
 import { useState } from "react"
 import { Colors } from "@/constants/Colors"
 import { CustomButton } from "@/components/common/CustomButton"
+import { useAuth } from "@/contexts/auth"
 
 
 export default function ForgotScreen(){
+    const{RequestPasswordChange}=useAuth()
     const[value,setValue]=useState('')
     return(<SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background,alignItems:'center'}}>
 <View > 
@@ -29,7 +31,6 @@ export default function ForgotScreen(){
             <View style={{alignItems:'center'}}>
             <TextInput style={styles.input}
             placeholder="contact@copsys.com"
-            placeholderTextColor={'black'}
             onChangeText={(text)=>{setValue(text)}}
             value={value}/> 
             </View>  
@@ -37,7 +38,10 @@ export default function ForgotScreen(){
             title={'Reset Password'}
             color={Colors.custom.blue}
             buttonStyle={{borderRadius:17,height:56,width:314,marginTop:20}}
-            onPress={()=>router.push('/(auth)/verifyOtp')}/>
+            onPress={()=>{
+             /**  const done = RequestPasswordChange(value)
+               if(done===true){**/
+                router.push('/(auth)/verifyOtp')}}/>
           
  </View>
  </SafeAreaView>

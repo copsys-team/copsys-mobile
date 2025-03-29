@@ -43,10 +43,19 @@ export const AuthProvider = ({ children }:any) => {
        setIsLoading(false)}
 
   };
-  
+const RequestPasswordChange=async(email:string)=>{
+  try{
+  const response = await axios.post(`${API_URL}/users/password-reset`,{email})
+  console.log(response)
+  if(response){
+return true}}
+  catch(e:any){
+    console.log('There was error: ',e.message)
+  }
+}  
 
 
-const values = {Login,isLoading}
+const values = {Login,isLoading,RequestPasswordChange}
   return (
     <AuthContext.Provider value={values}>
       {children}

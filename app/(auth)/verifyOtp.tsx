@@ -8,11 +8,13 @@ import { CustomButton } from '@/components/common/CustomButton'
 import { color } from '@rneui/base'
 import { Colors } from '@/constants/Colors'
 export default function VerifyOtp (){
+    const [timeLeft,setTimeLeft]=useState(60);
     const [fdigit,setFdigit]=useState<string | null>(null)
     const [sdigit,setSdigit]=useState<string | null>(null)
     const [tdigit,setTdigit]=useState<string | null>(null)
     const [fodigit,setFodigit]=useState<string | null>(null)
     const [otpCode,setOtpCode]=useState<string | null>(null)
+    const [showTimer,setShowTimer]=useState(false)
     const[done,setDone]=useState(false)
     useEffect(()=>{
     if(tdigit&&fodigit&&fdigit&&sdigit){
@@ -27,7 +29,13 @@ else{
           console.log(otpCode);
         }
       }, [otpCode]);
-      
+   useEffect(()=>{
+    if (timeLeft===0){
+        return;
+    }
+    const intervalId = setInterval(()=>{setTimeLeft(timeLeft-1)},1000)
+    return()=>clearInterval(intervalId)
+   },[timeLeft])   
     return(
         <SafeAreaView style={{flex:1,padding:30,backgroundColor:Colors.light.background,alignItems:'center'}}>
         <View>
@@ -41,6 +49,15 @@ else{
                  <OtpBox onChangeText={(text:any)=>setSdigit(text)} value={sdigit} style={{ borderColor: done ? 'royalblue' : 'gray' }}/>
                  <OtpBox onChangeText={(text:any)=>setTdigit(text)} value={tdigit} style={{ borderColor: done ? 'royalblue' : 'gray' }}/>
                  <OtpBox onChangeText={(text:any)=>setFodigit(text)} value={fodigit} style={{ borderColor: done ? 'royalblue' : 'gray' }}/>
+               </View>
+              <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                <Text>Time remaining: {timeLeft}second(s)</Text>
+                <Text style={{color:timeLeft>0?'lightgray':'royalblue'}}
+                onPress={()=>{
+                    if(timeLeft===0){
+                        setTimeLeft(60)
+                    }
+                }}>Resend OTP</Text>
                </View>
                <CustomButton
                 title='Verify'
